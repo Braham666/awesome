@@ -49,7 +49,7 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "kitty"
-editor = os.getenv("vim") or "gedit"
+editor = os.getenv("nvim") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
@@ -294,26 +294,33 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
 
-    awful.key({ modkey, "Control" }, "n",
-              function ()
-                  local c = awful.client.restore()
-                  -- Focus restored client
-                  if c then
-                    c:emit_signal(
-                        "request::activate", "key.unminimize", {raise = true}
-                    )
-                  end
-              end,
-              {description = "restore minimized", group = "client"}),
+    --awful.key({ modkey, "Control" }, "n",
+    --          function ()
+    --              local c = awful.client.restore()
+    --              -- Focus restored client
+    --              if c then
+    --                c:emit_signal(
+    --                    "request::activate", "key.unminimize", {raise = true}
+    --                )
+    --              end
+    --          end,
+    --          {description = "restore minimized", group = "client"}),
 
     -- Launchers
     -- Dmenu
     awful.key({ modkey },            "a",     function () awful.util.spawn( "dmenu_run") end,
               {description = "run dmenu", group = "launcher"}),
     --Firefox 
+   
     awful.key({ modkey },            "w",     function () awful.util.spawn("firefox") end,
+
               {description = "run firefox", group = "launcher"}),
+    --Ranger
     
+    awful.key({ modkey },            "f",     function () awful.util.spawn("kitty ranger") end,
+
+              {description = "run ranger", group = "launcher"}),
+
     awful.key({ modkey }, "x",
               function ()
                   awful.prompt.run {
@@ -564,20 +571,11 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- }}}
 
  --autostart
-  
-  --sets the wallpaper
-awful.spawn.with_shell("nitrogen --restore")
-
-  --transparency
-awful.spawn.with_shell("picom")
-  
-  --the network control applet
-awful.spawn.with_shell("nm-applet")
-
-  --the volume applet
-awful.spawn.with_shell("killall volumeicon;volumeicon")
+  awful.spawn.with_shell("killall polybar;polybar braham")
+  awful.spawn.with_shell("nitrogen --restore")
+  awful.spawn.with_shell("picom")
 
 
-  --Gaps
+--Gaps
 
 beautiful.useless_gap = 5
